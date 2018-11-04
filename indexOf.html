@@ -1,0 +1,81 @@
+<script src="simpletest.js"></script>
+<script>
+
+// indexOf returns the first index at which a given element can be found in the array, or -1 if it is not present.
+
+// Syntax: array.indexOf(searchElement[, fromIndex])
+
+// PARAMETERS:
+// array -- the original array
+// searchElement -- element to locate in the array
+// fromIndex (optional) -- the index position to start searching. 
+  // If greater than or equal to length, -1 is returned, array not searched.
+  // If a negative number, it is taken as the offset from the end of the array.
+  // If 0 is provided, the entire array is searched.
+
+// RETURNs: the first index of the element in the array, -1 if not found.
+
+function indexOf(array, searchElement, fromIndex) {
+  var startingIndex = 0;
+
+  if (fromIndex) {
+    if (fromIndex > 0) {
+      startingIndex = fromIndex;
+    }
+    if (fromIndex < 0) {
+      startingIndex = array.length + fromIndex;
+    }
+  }
+
+  if (startingIndex > array.length) {
+    return -1;
+  }
+
+  for (var i = startingIndex; i < array.length; i++) {
+    if (array[i] === searchElement) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+tests({
+  'It should search the array and return the first index of the element found.': function() {
+    var searchedIndex = indexOf([1, 2, 3], 3);
+    eq(searchedIndex, 2)
+  },
+  'It should return -1 if no matching elements are found.': function() {
+    var searchedIndex = indexOf([1, 2, 3], 4);
+    eq(searchedIndex, -1)
+  },
+  'If fromIndex, it should start searching from the provided index.': function() {
+    var arrayToSearch = [3, 2, 3];
+    var startIndex = 1;
+
+    var searchedIndex = indexOf(arrayToSearch, 3, startIndex);
+    eq(searchedIndex, 2)
+  },
+  'If fromIndex is greater than or equal to length, -1 is returned and the array is not searched.': function() {
+    var arrayToSearch = [3, 2, 3];
+    var startIndex = 3;
+
+    var searchedIndex = indexOf(arrayToSearch, 3, startIndex);
+    eq(searchedIndex, -1)
+  },
+  'If fromIndex is a negative number, it is taken as the offset from the end of the array.': function() {
+    var arrayToSearch = [3, 2, 3];
+    var startIndex = -1;
+
+    var searchedIndex = indexOf(arrayToSearch, 3, startIndex);
+    eq(searchedIndex, 2)
+  },
+  'If 0 is provided, the entire array is searched.': function() {
+    var arrayToSearch = [1, 2, 3];
+    var startIndex = 0;
+
+    var searchedIndex = indexOf(arrayToSearch, 3, startIndex);
+    eq(searchedIndex, 2)
+  },
+})
+
+</script>

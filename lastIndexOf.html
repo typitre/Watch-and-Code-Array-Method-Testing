@@ -1,0 +1,75 @@
+<script src="simpletest.js"></script>
+<script>
+
+
+// returns the last index of a given element it can find, or -1 if unfound.
+// Searched backwards, starting optional 'fromIndex'
+
+// function arguments:
+  // searchElement = what to find
+  // fromIndex = where to start searching backwards from. Defaults to array's length -1.
+    // If greater than or equal to the length of the array, whole array searched.
+    // If negative, taken as the _offset_ from the end of the array.
+    // If the calculated index is less than 0, -1 is returned.
+
+
+function lastIndexOf(array, searchElement, fromIndex) {
+  // for loop. Start at the end of the array, move backwards, pass if searchElement is found.
+  var startingPoint = array.length - 1;
+  if (arguments.length === 3) {
+    if (fromIndex > 0) {
+      startingPoint = fromIndex;
+    } else {
+      startingPoint = startingPoint + fromIndex;
+    }
+  }
+
+  for (var i = startingPoint; i >= 0; i--) {
+    if (array[i] === searchElement) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+tests({
+  'It should search the array.': function() {
+    var arrayToBeSearched = [1, 2, 3];
+    var searchResult = lastIndexOf(arrayToBeSearched, 2);
+
+    eq(searchResult, 1)
+  },
+  'If no fromIndex, it should start at the end of the array.': function() {
+    var arrayToBeSearched = [1, 2, 1];
+    var searchResult = lastIndexOf(arrayToBeSearched, 1);
+
+    eq(searchResult, 2);
+  },
+  'If fromIndex is positive, it should start at that index position and search backwards.': function() {
+    var arrayToBeSearched = [1, 2, 1];
+    var searchResult = lastIndexOf(arrayToBeSearched, 1, 1);
+
+    eq(searchResult, 0);
+  },
+  'If fromIndex is negative, it should use that as an offset from the end of the array.': function() {
+    var arrayToBeSearched = [1, 1, 1];
+    var searchResult = lastIndexOf(arrayToBeSearched, 1, -1);
+
+    eq(searchResult, 1);
+  },
+  'It should return -1 if the search fails.': function() {
+    var arrayToBeSearched = [1, 2, 3];
+    var searchResult = lastIndexOf(arrayToBeSearched, 4);
+
+    eq(searchResult, -1);
+  },
+  'It should return -1 if the calculated index is less than 0.': function() {
+    var arrayToBeSearched = [1, 2];
+    var searchResult = lastIndexOf(arrayToBeSearched, 1, -2);
+
+    eq(searchResult, -1);
+  }
+})
+
+
+</script>

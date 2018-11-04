@@ -1,0 +1,81 @@
+<script src="simpletest.js"></script>
+<script>
+
+
+// returns the first element in the array that satisfies the provided testing function.
+// otherwise, undefined is returned.
+
+// parameters
+  // callback
+    // element -- current element processed
+    // index -- index of the element
+    // array -- the original Array
+  //thisArg -- optional this argument
+
+
+function find(array, callback, optionalThis) {
+  var findCallback = callback;
+
+  if (optionalThis) {
+    findCallback = callback.bind(optionalThis);
+  }
+
+  for (var i = 0; i < array.length; i++) {
+    if (findCallback(array[i], i, array)) {
+      return array[i];
+    }
+  }
+}
+
+
+tests ({
+  'The callback should pass in the current element as the first argument.': function() {
+    find([1], function(element) {
+      eq(element, 1);
+    });
+  },
+  'The callback should pass in the index as the second argument.': function() {
+    find([1], function(element, index) {
+      eq(index, 0);
+    });
+  },
+  'The callback should pass in the original array as the third arguement.': function() {
+    var testArray = [1, 2];
+    find(testArray, function(element, index, originalArray) {
+      eq(originalArray, testArray);
+    });
+  },
+  'It should run the callback on each item in the array until callback returns true.': function() {
+    var numberOfTimesCallbackHasRan = 0;
+    find([1, 2, 3, 4], function(element) {
+      numberOfTimesCallbackHasRan++;
+      return element === 3;
+    });
+    eq(numberOfTimesCallbackHasRan, 3);
+  },
+  'If callback returns true, it should return that element.': function() {
+    var testArray = [1, 2, 3, 4]
+    var returnedElement = undefined;
+
+    returnedElement = find(testArray, function(element) {
+      return element > 2;
+    });
+    eq(returnedElement, 3);
+  },
+  'If callback never returns true, it should return undefined.': function() {
+    var testArray = [1, 2, 3, , 4]
+    var returnedElement = [];
+
+    returnedElement = find(testArray, function(element) {
+      return element > 10;
+    });
+    eq(returnedElement, undefined);
+  },
+  'If there is an optional this argument, it will use that as the this for the callback.': function() {
+    find([1], function() {
+      eq(this.description, 'This is an optional this argument.')
+    }, {description: 'This is an optional this argument.'})
+  },
+})
+
+</script>

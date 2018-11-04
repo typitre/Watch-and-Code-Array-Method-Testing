@@ -1,0 +1,92 @@
+<script src="simpletest.js"></script>
+<script>
+
+// OVERVIEW: slice returns a portion of an array into a new array. Original array is not modified.
+
+// PARAMETERS:
+  // array -- the original array.
+  // begin -- OPTIONAL. Index to start extraction. Negative value indicates start from offset of end.
+  // end -- OPTIONAL. Index BEFORE which to end extraction. Extracts up to but does not include end.
+
+// RETURNs a new array containing the extracted elements.
+
+function slice(array, begin, end) {
+  var slicedArray = [];
+  var startIndex = 0;
+  var endIndex = array.length;
+
+  if (begin > 0) {
+    startIndex = begin;
+  }
+  if (begin < 0) {
+    startIndex = array.length + begin;
+  }
+
+  if (end > 0) {
+    endIndex = end;
+  }
+  if (end < 0) {
+    endIndex = array.length + end;
+  }
+
+  for (var i = startIndex; i < endIndex; i++) {
+    slicedArray.push(array[i]);
+  }
+
+  return slicedArray;
+}
+
+tests({
+  'It should extract a new array and not modifiy the original array.': function() {
+    originalArray = [];
+    slicedArray = slice(originalArray);
+    eq(slicedArray !== originalArray, true)
+  },
+  'If no begin, start at index 0.': function() {
+    originalArray = [1];
+    slicedArray = slice(originalArray);
+    eq(slicedArray[0], 1);
+    eq(slicedArray[1], undefined);
+  },
+  'If no end, extract through to end of sequence.': function() {
+    originalArray = [1, 2];
+    slicedArray = slice(originalArray);
+    eq(slicedArray[0], 1);
+    eq(slicedArray[1], 2);
+  },
+  'If begin, start extracting at this index position.': function() {
+    originalArray = [1, 2];
+    slicedArray = slice(originalArray, 1);
+    eq(slicedArray[0], 2);
+  },
+  'If begin, and begin is negative, use begin as an offset from the end of the array.': function() {
+    originalArray = [1, 2, 3];
+    slicedArray = slice(originalArray, -1);
+    eq(slicedArray[0], 3);
+  },
+  'If begin, but begin is greater than the length of the sequence, an empty array is returned.': function() {
+    originalArray = [1];
+    slicedArray = slice(originalArray, 1);
+    eq(slicedArray[0], undefined);
+  },
+  'If end, extraction stops up to end, but does not include end.': function() {
+    originalArray = [1, 2];
+    slicedArray = slice(originalArray, 0, 1);
+    eq(slicedArray[0], 1);
+    eq(slicedArray[1], undefined);
+  },
+  'If end, and end is negative, use end as an offset from the end of the sequence.': function() {
+    originalArray = [1, 2, 3, 4, 5];
+    slicedArray = slice(originalArray, 0, -1);
+    eq(slicedArray[3], 4);
+    eq(slicedArray[4], undefined);
+  },
+  'If end, and end is greater than length of sequence, extract through to the end of the sequence.': function() {
+    originalArray = [1, 2, 3, 4, 5];
+    slicedArray = slice(originalArray, 0, 10);
+    eq(slicedArray[4], 5);
+    eq(slicedArray[5], undefined);
+  }
+})
+
+</script>

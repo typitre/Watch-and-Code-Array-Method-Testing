@@ -1,0 +1,47 @@
+<script src="simpletest.js"></script>
+<script>
+
+// Adds one or more elements to the end of an array and returns the new length of the array.
+
+// PARAMETERS
+// Array -- the array to modifiy.
+// elementN -- the elements to add to the end of the array.
+
+function push(array) {
+  var indexToStartPushing = array.length;
+  var elementNIndex = 1;
+
+  for (var i = indexToStartPushing; elementNIndex < arguments.length; i++, elementNIndex++) {
+    array[i] = arguments[elementNIndex];
+  }
+
+  return array.length;
+
+}
+
+tests({
+  'It should add the elements to the end of the array.': function() {
+    var pushArray = [1, 2];
+    push(pushArray, 3);
+    eq(pushArray[2], 3);
+  },
+  'It should add as many new elements as arguments passed into function.': function() {
+    var pushArray = [1];
+    push(pushArray, 2, 3, 4, 5);
+    eq(pushArray[4], 5);
+  },
+  'It should return the new length of the array.': function() {
+    var pushArray = [1];
+    var pushArrayLength = push(pushArray, 2);
+    eq(pushArrayLength, 2);
+  },
+  'It should be able to push an array.': function() {
+    var pushArray1 = [1, 2];
+    var pushArray2 = [3, 4];
+    var pushArrayLength = push(pushArray1, pushArray2);
+    eq(pushArrayLength, 3);
+    eq(pushArray1[2], pushArray2)
+  }
+})
+
+</script>

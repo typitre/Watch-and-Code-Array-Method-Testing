@@ -1,0 +1,86 @@
+<script src="simpletest.js"></script>
+<script>
+
+// join creates and returns a new string by concatenating all the elements in an array (or an array-like object), sepoerated by commas or a specified seperator string.
+
+// PARAMETERS
+// Array -- array to join
+// separator -- specifies a string to separate each pair of adjacent elements in the array. 
+
+
+function join(array, seperator) {
+  var joinedString = '';
+  var joinSeperator = ','
+
+  if (seperator) {
+    joinSeperator = seperator;
+  }
+
+  if (seperator === '') {
+    joinSeperator = '';
+  }
+
+  for (var i = 0; i < array.length; i++) {
+    var stringToAdd = array[i];
+
+    if (stringToAdd === undefined || stringToAdd === null) {
+      stringToAdd = '';
+    }
+
+    if (i === array.length -1) {
+      joinedString = joinedString.concat(stringToAdd);
+    } else {
+      joinedString = joinedString.concat(stringToAdd, joinSeperator)
+    }
+  }
+
+  return joinedString;
+
+}
+
+tests({
+
+  'It should join all elements in an array into a new string.': function() {
+    var testArray = ['element 1', 'element 2'];
+    var joinedString = join(testArray);
+
+    eq(joinedString, 'element 1,element 2')
+  },
+  'If no seperator, the array elements should be separated with a comma.': function() {
+    var testArray = ['element 1', 'element 2'];
+    var joinedString = join(testArray);
+
+    eq(joinedString, 'element 1,element 2')
+  },
+  'If seperator is an empty string, all elements are joined without characters between them.': function() {
+    var testArray = ['element 1', 'element 2'];
+    var joinedString = join(testArray, '');
+
+    eq(joinedString, 'element 1element 2')
+  },
+  'If seperator is a string, use that in place of a comma.': function() {
+    var testArray = ['element one', 'element two'];
+    var joinedString = join(testArray, ' and ');
+
+    eq(joinedString, 'element one and element two')
+  },
+  'If array.length is 0, the empty string is returned.': function() {
+    var testArray = [];
+    var joinedString = join(testArray);
+
+    eq(joinedString, '')
+  },
+  'If an element is undefined or null, it is converted to an empty string.': function() {
+    var testArray = [null, undefined, 'element three'];
+    var joinedString = join(testArray);
+    
+    eq(joinedString, ',,element three')
+  },
+  'It should convert the seperator into a string if neccesary. ': function() {
+    var testArray = ['element one', 'element two'];
+    var joinedString = join(testArray, 1);
+
+    eq(joinedString, 'element one1element two')
+  }
+})
+</script>

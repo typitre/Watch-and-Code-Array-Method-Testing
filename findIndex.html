@@ -1,0 +1,90 @@
+<script src="simpletest.js"></script>
+<script>
+
+// returns the index of the first element in the array that satisfies the provided testing function.
+// Otherwise, returns -1.
+
+// Arguments
+  // callback
+    // element
+    // index
+    // originalArray
+  // Optional this
+
+function findIndex(array, callback, optionalThis) {
+  var findIndexCallback = callback;
+
+  if (optionalThis) {
+    findIndexCallback = callback.bind(optionalThis);
+  }
+
+  for (var i = 0; i < array.length; i++) {
+    if (findIndexCallback(array[i], i, array)) {
+      return i;
+    }
+
+    if (i === array.length -1) {
+      return -1;
+    }
+  }
+  return -1;
+};
+
+tests ({
+  'It should pass in the element of the array being run as the first argument of callback.': function() {
+    findIndex([1], function(element) {
+      eq(element, 1);
+    });
+  },
+  'It should pass in the index of the element being run as the second argument of callback.': function() {
+    findIndex([1], function(element, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in the originalArray as the third arguement of callback.': function() {
+    var testArray = [1];
+
+    findIndex(testArray, function(element, index, originalArray) {
+      eq(originalArray, testArray);
+    });
+  },
+  'It should run the callback on every element in the array until callback returns truthy.': function() {
+    var numberOfTimesCallbackHasRan = 0;
+    findIndex([1, 2, 3], function(element) {
+      numberOfTimesCallbackHasRan++;
+      return element === 2;
+    });
+    eq(numberOfTimesCallbackHasRan, 2);
+  },
+  'If callback returns truthy, it should return the index of the element.': function() {
+    var testArray = [1, 2, 3];
+    var indexResult = 0;
+
+    indexResult = findIndex(testArray, function(element) {
+      return element === 3;
+    });
+    eq(indexResult, 2);
+  },
+  'If callback never returns truthy, it should return -1.': function() {
+    var testArray = [, 1, 2, 3, 4, 5, , 6, 9];
+    var indexResult = 0;
+
+    indexResult = findIndex(testArray, function(element) {
+      return element === 10;
+    });
+    eq(indexResult, -1);
+  },
+  'It should accept an optional this value as the third argument of findIndex.': function() {
+    findIndex([1], function() {
+      eq(this.description, 'This is an optional this argument.')
+    }, {description: 'This is an optional this argument.'})
+  },
+  'If an empty array is passed in, it should return -1.': function() {
+    var testArray = [];
+
+    findIndex(testArray, function() {
+    });
+  },
+})
+
+</script>

@@ -1,0 +1,141 @@
+<script src="simpletest.js"></script>
+<script>
+
+// copyWithin shallow copies part of an arrayot another location in the same array and returns it, without modifying its size.
+
+// PARAMETERS
+  // Array -- array to modify
+    // target -- index at which to copy the sequence too. If negative, target will be counted from the end.
+    // start -- OPTIONAL. Index to start copying elements from.
+    // end -- OPTIONAL. Index to end copying elements from. Copies UP TO but not the end index.
+
+function copyWithin(array, target, start, end) {
+  var startIndex = 0;
+  var endIndex = array.length;
+  var copiedSection = [];
+  var copySectionIndex = 0;
+  var targetIndex = target
+
+  if (target < 0) {
+    targetIndex = array.length + target;
+  }
+
+  if (start) {
+    if (start < 0) {
+      startIndex = array.length + start;
+    } else {
+      startIndex = start;
+    }
+  }
+
+  if (end) {
+    if (end < 0) {
+      endIndex = array.length + end;
+    } else {
+      endIndex = end;
+    }
+  }
+
+  for (var i = startIndex; i < array.length && i < endIndex; i++, copySectionIndex++) {
+    copiedSection[copySectionIndex] = array[i];
+  }
+
+  copySectionIndex = 0;
+
+  for (var i = targetIndex; i < array.length && copySectionIndex < copiedSection.length; i++, copySectionIndex++) {
+    array[i] = copiedSection[copySectionIndex];
+  }
+
+  return array;
+};
+
+
+tests ({
+  'It should not change the size of the array.': function() {
+    var arrayToCopy = [1, 2];
+    copyWithin(arrayToCopy);
+
+    eq(arrayToCopy.length, 2)
+  },
+  'It should return the modified array.': function() {
+    var arrayToCopy = [1, 2];
+    var copiedArray = copyWithin(arrayToCopy);
+
+    eq(arrayToCopy, copiedArray)
+  },
+  'If target is at or greater than array.length, nothing is copied. ': function() {
+    var arrayToCopy = [1, 2];
+    copyWithin(arrayToCopy, 3);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 2);
+  },
+  'If target is positioned after start, the copied sequence will be trimmed to fit array.length.': function() {
+    var arrayToCopy = [1, 2, 3, 4, 5];
+    copyWithin(arrayToCopy, 3, 0);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 3);
+    eq(arrayToCopy[3], 1);
+    eq(arrayToCopy[4], 2);
+    eq(arrayToCopy.length, 5)
+  },
+  'If target is negative, use it as an offset from the end of the array.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, -1);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 1);
+  },
+  'If no start, start copying from the 0 index position.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, 1);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 1);
+    eq(arrayToCopy[2], 2);
+  },
+  'If start, start copying from provided index location.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, 0, 2);
+
+    eq(arrayToCopy[0], 3);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 3);
+  },
+  'If no end, end copying at the end of the array.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, 0, 0);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 3);
+  },
+  'If end, stop copying at provided index location, do not include that index in the copy.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, 2, 0, 1);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 1);
+  },
+  'If start is negative, use as an offset from the end of the array.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, 0, -1);
+
+    eq(arrayToCopy[0], 3);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 3);
+  },
+  'If end is negative, use as an offset from the end of the array.': function() {
+    var arrayToCopy = [1, 2, 3];
+    copyWithin(arrayToCopy, 2, 0, -2);
+
+    eq(arrayToCopy[0], 1);
+    eq(arrayToCopy[1], 2);
+    eq(arrayToCopy[2], 1);
+  }
+})
+</script>

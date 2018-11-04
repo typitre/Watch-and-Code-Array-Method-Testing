@@ -1,0 +1,64 @@
+<script src="simpletest.js"></script>
+<script>
+
+// includes method determines whether an array includes a certain element, returned true or false as appropriate.
+
+// SYNTAX array.includes(searchElement[, fromIndex])
+
+// PARAMETERS:
+  // array -- array to search.
+  // searchElement -- the element to search for.
+  // fromIndex -- OPTIONAL, the position to start searching from. A negative values search from the index of array.length - fromIndex.
+
+// RETURNs a Boolean which is true if searchElement is found. False if not found.
+
+function includes(array, searchElement, fromIndex) {
+  var startIndex = 0;
+
+  if (fromIndex > 0) {
+    startIndex = fromIndex;
+  }
+  if (fromIndex < 0) {
+    startIndex = array.length + fromIndex;
+  }
+
+  for (var i = startIndex; i < array.length; i++) {
+    if (array[i] === searchElement) {
+      return true;
+    }
+  }
+  return false;
+}
+
+tests({
+  'It should search an array for searchElement and return true if found.': function() {
+    var searchResults = includes([1], 1);
+    eq(searchResults, true);
+  },
+  'It should search an array for searchElement and return false if not found.': function() {
+    var searchResults = includes([1], 2);
+    eq(searchResults, false);
+  },
+  'If fromIndex, it should start searching from that index position.': function() {
+    var arrayToSearch = [1, 2, 3];
+    var startFromIndex = 1;
+    var searchResults = includes(arrayToSearch, 1, startFromIndex);
+    eq(searchResults, false);
+  },
+  'If fromIndex, and fromIndex is negative, it should use that as the offset to start searching from.': function() {
+    var arrayToSearch = [1, 2, 3];
+    var startFromIndex = -1;
+    var searchResults = includes(arrayToSearch, 1, startFromIndex);
+
+    eq(searchResults, false);
+  },
+  'If fromIndex is 0, it should search the entire array.': function() {
+    var arrayToSearch = [1, 2, 3];
+    var startFromIndex = 0;
+    var searchResults = includes(arrayToSearch, 1, startFromIndex);
+
+    eq(searchResults, true);
+  }
+})
+
+</script>

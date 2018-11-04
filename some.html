@@ -1,0 +1,84 @@
+<script src="simpletest.js"></script>
+<script>
+    
+// The some() method tests whether at least one element in the array passes the test implemented by the provided function.
+
+// Syntax of original
+  // array.some(callback[, this Arg])
+
+// Parameters
+  // Callback
+    // currentValue
+    // index
+    // array
+  // Optional thisArg
+
+function some(array, callback, thisArg) {
+  var someCallback = callback;
+
+  if (thisArg) {
+    someCallback = callback.bind(thisArg);
+  }
+
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] !== undefined) {
+      if (someCallback(array[i], i, array)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+tests({
+  'It should execute the callback for each element in the array until it returns a truthy value.':function() {
+    var numberOfTimesCallbackHasRun = 0;
+    some([1, 2], function() {
+      numberOfTimesCallbackHasRun++;
+    })
+    eq(numberOfTimesCallbackHasRun, 2);
+  },
+  'If callback returns truthy, the some function should return true.':function() {
+    var testArray = [1, 2, 3];
+    var someResults = some(testArray, function() {
+      return true;
+    })
+    eq(someResults, true);
+  },
+  'If callback never returns truthy, the some function should return false.':function() {
+    var someResults = some([1], function(element) {
+      element === 2;
+    })
+    eq(someResults, false);
+  },
+  'It should skip over holes in the array.':function() {
+    var numberOfTimesCallbackHasRun = 0;
+    some([, 1, 2, , 3, 4, ,], function() {
+      numberOfTimesCallbackHasRun++;
+    })
+    eq(numberOfTimesCallbackHasRun, 4);
+  },
+  'It should pass in the element as the first argument of the callback.':function() {
+    some([1], function(element) {
+      eq(element, 1);
+    })
+  },
+  'It should pass in the index as the second argument of the callback.':function() {
+    some([1], function(element, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in the original array as the third argument on the callback.':function() {
+    var testArray = [1, 2, 3];
+    some(testArray, function(element, index, originalArray) {
+      eq(originalArray, testArray);
+    });
+  },
+  'If there is an optional thisArg, it should set the this value for the callback.':function() {
+    some([1], function() {
+      eq(this.description, 'This is an optional this argument.')
+    }, {description: 'This is an optional this argument.'})
+  },
+})
+
+</script>

@@ -1,0 +1,70 @@
+<script src="simpletest.js"></script>
+<script>
+
+// The concat() method is used to merge two or more arrays. This method does not change the existing arrays, but instead returns a new array.
+
+// PARAMETERS
+// valueN -- arrays and/or values to concatenate into a new array.
+
+// Returns a NEW array, does not change original arrays.
+
+
+function concat() {
+  totalArguments = arguments.length;
+  newArray = [];
+
+  for (var i = 0; i < totalArguments; i++) {
+    var nthArgument = arguments[i];
+    
+    if (nthArgument instanceof Array) {
+      for (var j = 0; j < nthArgument.length; j++) {
+        newArray.push(nthArgument[j]);
+      }
+    } else {
+      newArray.push(nthArgument);
+    }
+
+  }
+  return newArray;
+}
+
+tests({
+  'It should add all arguments passed in order to a new array.': function() {
+    var concatenatedArray =  concat([1, 2], [3]);
+    
+    eq(concatenatedArray[0], 1);
+    eq(concatenatedArray[1], 2);
+    eq(concatenatedArray[2], 3);
+    eq(concatenatedArray[3], undefined);
+  },
+  'If the argument is not an array, it should add the argument itself.': function() {
+    var concatenatedArray = concat(1, [2, 3]);
+
+    eq(concatenatedArray[0], 1);
+    eq(concatenatedArray[1], 2);
+    eq(concatenatedArray[2], 3);
+    eq(concatenatedArray[3], undefined);
+  },
+  'It should copy object references into the new array, not the actual object itself.': function() {
+    var nestedArray = [[2, 3], 3];
+    var concatenatedArray = concat(1, nestedArray);
+
+    eq(concatenatedArray[1], nestedArray[0]);
+    eq(concatenatedArray[2], 3);
+  },
+  'It should work for strings.': function() {
+    var concatenatedArray = concat(1, 'this is a string', 'this is a second string');
+
+    eq(concatenatedArray[0], 1);
+    eq(concatenatedArray[1], 'this is a string');
+    eq(concatenatedArray[2], 'this is a second string');
+  },
+  'It should work for Booleans.': function() {
+    var concatenatedArray = concat(1, true);
+
+    eq(concatenatedArray[0], 1);
+    eq(concatenatedArray[1], true);
+  },
+})
+
+</script>

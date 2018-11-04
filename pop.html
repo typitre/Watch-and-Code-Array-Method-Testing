@@ -1,0 +1,52 @@
+<script src="simpletest.js"></script>
+<script>
+
+
+// arr.pop()
+// Removes the last element from the array, returns it.
+// Changes the length of the array.
+// If you call pop() on an empty array, it returns undefined.
+
+// PROTOTYPE
+
+// function pop(array) {
+//   var lastElementIndex = array.length - 1;
+//   var lastElement = array[lastElementIndex];
+//   array.splice(lastElementIndex, 1);
+//   return lastElement;
+// };
+
+// Removes the last element from an array.
+
+// Returns the last element at the end of the function.
+
+// Changes the original array.
+
+// Returns undefined on an empty array.
+
+function pop(array) {
+  var lastElementIndex = array.length - 1;
+  var lastElement = array[lastElementIndex];
+
+  array.splice(lastElementIndex, 1);
+  return lastElement;
+};
+
+tests({
+  'It should remove the last element from an array.': function () {
+    var exampleArray = [1, 2];
+    pop(exampleArray);
+    eq(exampleArray[0], 1);
+    eq(exampleArray[1], undefined);
+  },
+  'It should return the last element from the array.': function () {
+    var lastElementInArray = pop([1, 2]);
+    eq(lastElementInArray, 2);
+  },
+  'It should return undefined on an empty array.': function () {
+    var examplePoppedArray = pop([]);
+    eq(examplePoppedArray, undefined);
+  }
+});
+
+</script>

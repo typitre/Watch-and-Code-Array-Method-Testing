@@ -1,0 +1,66 @@
+<script src="simpletest.js"></script>
+<script>
+
+// Removes the first element from an array and returns that removed element. This method CHANGES the length of the array.
+
+function shift(array) {
+
+  var shiftedArray = [];
+  var shiftedIndex = 0;
+  var firstElement = array[0];
+
+  for (var i = 1; i < array.length; i++, shiftedIndex++) {
+    shiftedArray[shiftedIndex] = array[i];
+  }
+
+  array.length = 0;
+
+  for (var i = 0; i < shiftedArray.length; i++) {
+    array[i] = shiftedArray[i];
+  }
+
+  return firstElement;
+
+}
+
+tests({
+  'It should remove the 0th indexed element from an array.': function() {
+    var arrayToShift = [1, 2, 3];
+    shift(arrayToShift);
+    eq(arrayToShift[0] !== 1, true);
+  },
+  'It should move all indexes down, so that position 0 is not empty.': function() {
+    var arrayToShift = [1, 2, 3];
+    shift(arrayToShift);
+    eq(arrayToShift[2], undefined);
+  },
+  'It should return the removed element from an array.': function() {
+    var arrayToShift = [1, 2, 3];
+    var removedElement = shift(arrayToShift);
+    eq(removedElement, 1);
+  },
+  'If the array is empty, it should return undefined.': function() {
+    var arrayToShift = [];
+    var removedElement = shift(arrayToShift);
+    eq(removedElement, undefined);
+  },
+  'It should change the length of the array.': function() {
+    var arrayToShift = [1, 2, 3];
+    shift(arrayToShift);
+    eq(arrayToShift.length, 2);
+  },
+  'It should work with strings.': function() {
+    var arrayToShift = ['first element', 'second element'];
+    shift(arrayToShift);
+    eq(arrayToShift[0], 'second element');
+  },
+  'It should work inside of a while loop.': function() {
+    var arrayToShift = [1, 2, 3];
+    while (shift(arrayToShift) !== undefined) {
+    }
+    eq(arrayToShift.length === 0, true);
+  },
+})
+
+
+</script>

@@ -1,0 +1,63 @@
+<script src="simpletest.js"></script>
+<script>
+
+// Adds one or more elements to the beginning of an array and returns the new length of the array.
+
+// PARAMETERS
+  // Array -- array to pass in.
+  // elementN -- elements to add to the front of the array.
+
+// RETURNs the new length property of the object that was passed in.
+
+function unshift(array) {
+  var unshiftedArray = [];
+  var unshiftedArrayIndex = 0;
+
+  for (var i = 1; i < arguments.length; i++, unshiftedArrayIndex++) {
+    unshiftedArray[unshiftedArrayIndex] = arguments[i];
+  }
+
+  for (var i = 0; i < array.length; i++, unshiftedArrayIndex++) {
+    unshiftedArray[unshiftedArrayIndex] = array[i];
+  }
+  
+  array.length = 0;
+
+  for (var i = 0; i < unshiftedArray.length; i++) {
+    array[i] = unshiftedArray[i];
+  }
+
+  return array.length;
+}
+
+tests({
+  'It should add new elements to the beginning of an array.': function() {
+    var arrayToUnshift = [1];
+    unshift(arrayToUnshift, 2);
+    eq(arrayToUnshift[0], 2);
+  },
+  'It should add as many elements as passed into the function.': function() {
+    var arrayToUnshift = [1];
+    unshift(arrayToUnshift, 2, 3);
+    eq(arrayToUnshift.length === 3, true);
+  },
+  'It should keep additional elements added in the same order they were passed in as.': function() {
+    var arrayToUnshift = [1];
+    unshift(arrayToUnshift, 2, 3);
+    eq(arrayToUnshift[0], 2);
+  },
+  'It should return the new length property of the array.': function() {
+    var arrayToUnshift = [1];
+    var unshiftedLength = unshift(arrayToUnshift, 2, 3);
+    eq(unshiftedLength, 3);
+  },
+  'It should be able to add new arrays inside of the original array.': function() {
+    var arrayToUnshift = [1];
+    var arrayToAdd = [2, 3];
+    var unshiftedLength = unshift(arrayToUnshift, arrayToAdd);
+    eq(arrayToUnshift[0], arrayToAdd);
+  },
+})
+
+
+</script>
