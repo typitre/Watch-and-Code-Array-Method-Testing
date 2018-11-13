@@ -3,7 +3,7 @@
     
 // The some() method tests whether at least one element in the array passes the test implemented by the provided function.
 
-// Syntax of original
+// Syntax of original:
   // array.some(callback[, this Arg])
 
 // Parameters
@@ -14,19 +14,22 @@
   // Optional thisArg
 
 function some(array, callback, thisArg) {
-  var someCallback = callback;
+  var nonEmptyArrayPositions = Object.keys(array);
 
+  // Check for specific this argument and bind function if it exists.
   if (thisArg) {
-    someCallback = callback.bind(thisArg);
+    callback = callback.bind(thisArg);
   }
 
-  for (var i = 0; i < array.length; i++) {
-    if (array[i] !== undefined) {
-      if (someCallback(array[i], i, array)) {
-        return true;
-      }
+  // Run callback over each position in the array that is not empty.
+  for (var i = 0; i < nonEmptyArrayPositions.length; i++) {
+    var position = nonEmptyArrayPositions[i];
+    
+    if (callback(array[position], i, array)) {
+      return true;
     }
   }
+
   return false;
 };
 
@@ -78,6 +81,14 @@ tests({
     some([1], function() {
       eq(this.description, 'This is an optional this argument.')
     }, {description: 'This is an optional this argument.'})
+  },
+  'It should skip unassigned indexes.': function() {
+    var numberOfTimesCallbackHasRun = 0;
+    var testArray = [,, 2, 5,, 8,,,undefined, 1, 4];
+      some(testArray, function () {
+        numberOfTimesCallbackHasRun++;
+      });
+      eq(numberOfTimesCallbackHasRun, 6);
   },
 })
 
