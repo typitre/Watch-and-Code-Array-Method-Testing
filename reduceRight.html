@@ -12,28 +12,37 @@
 // initialValue -- object to use as the first argument to the first call of the callback.
 
 function reduceRight(array, callback, initialValue) {
-  var accumulator = undefined;
-  var startPosition = undefined;
+  var accumulator;
+  var startPosition;
+
+  // Get positions of elements that aren't holes. 
   var arrayIndexes = Object.keys(array);
+
   var lastItemInArrayIndex = arrayIndexes[arrayIndexes.length -1];
   var lastItemInArray = array[lastItemInArrayIndex];
 
-  if (initialValue) {
+  // If the function was passed in an initialValue, set accumulator and startPosition accordingly.
+  if (arguments.length > 2) {
     accumulator = initialValue;
     startPosition = lastItemInArrayIndex;
+
+  // When no initialValue passed in, use the last item in the array and shift the startPosition down.
   } else {
     accumulator = lastItemInArray;
     startPosition = lastItemInArrayIndex -1;
+
+    // If no initialValue and an empty array is passed in, throw a TypeError.
     if (array.length === 0) {
       throw TypeError('Cannot reduceRight an empty array with no initial value.');
     }
   }
 
+  // Actual code to reduce the array.
   for (var i = startPosition; i >= 0; i--) {
-    var hasValue = false;
-    if (array[i]) {hasValue = true};
-    if (hasValue) {
-      accumulator = callback(accumulator, array[i], i, array);
+
+    // Check to make sure that array[i] is not undefined or null.
+    if (array[i]) {
+      accumulator = callback(accumulator,array[i], i, array);
     }
   }
   return accumulator;
@@ -137,7 +146,15 @@ tests({
     reduceRight(testArray, function(accumulator, element, index, array) {
       eq(array, testArray);
     }, 2)
-  }
+  },
+  'If initialValue, and array is empty, return initialValue wihtout calling callback.': function() {
+    var numberOfTimesCallbackHasRan = 0;
+    var result = reduceRight([], function() {
+      numberOfTimesCallbackHasRan++;
+    }, 0);
+    eq(numberOfTimesCallbackHasRan, 0);
+    eq(result, 0);
+  },
 })
 
 </script>
