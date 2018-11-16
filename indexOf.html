@@ -32,8 +32,13 @@ function indexOf(array, searchElement, fromIndex) {
   }
 
   for (var i = startingIndex; i < array.length; i++) {
-    if (array[i] === searchElement) {
-      return i;
+
+    // Make sure element to search is not a hole.
+    if (i in array) {
+      
+      if (array[i] === searchElement) {
+        return i;
+      }
     }
   }
   return -1;
@@ -76,6 +81,10 @@ tests({
     var searchedIndex = indexOf(arrayToSearch, 3, startIndex);
     eq(searchedIndex, 2)
   },
+  'It should ignore holes.': function() {
+    var searchedIndex = indexOf([,,,1], undefined);
+    eq(searchedIndex, -1);
+  }
 })
 
 </script>
