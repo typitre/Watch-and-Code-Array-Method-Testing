@@ -10,16 +10,31 @@
 
 
 function concat() {
-  totalArguments = arguments.length;
-  newArray = [];
+  var totalArguments = arguments.length;
+  var newArray = [];
 
+  // For loop that will add each argument passed into concat to newArray.
   for (var i = 0; i < totalArguments; i++) {
     var nthArgument = arguments[i];
     
+    // Check if nthArgument is an array. 
     if (nthArgument instanceof Array) {
+
+      // For loop that will push each element of the nthArgument array to newArray.
       for (var j = 0; j < nthArgument.length; j++) {
-        newArray.push(nthArgument[j]);
+
+        // Check if the element has a value. If so, push it to newArray.
+        if (j in nthArgument) {
+          newArray.push(nthArgument[j]);
+
+          // Otherwise, element must be a hole. Create a hole in newArray.
+        } else {
+          newArray.length++;
+        }
+        
       }
+
+      // If the nthArgument is not an array, push the entirety of it to the end of newArray.  
     } else {
       newArray.push(nthArgument);
     }
@@ -65,6 +80,13 @@ tests({
     eq(concatenatedArray[0], 1);
     eq(concatenatedArray[1], true);
   },
+  'It should accept holes.': function() {
+    var holedArray = [,,,];
+
+    var concatenatedArray = concat(holedArray, 1);
+    eq(concatenatedArray.length, 4);
+    eq(0 in concatenatedArray, false);
+  }
 })
 
 </script>
