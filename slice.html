@@ -15,6 +15,7 @@ function slice(array, begin, end) {
   var startIndex = 0;
   var endIndex = array.length;
 
+  // Set start position based on begin.
   if (begin > 0) {
     startIndex = begin;
   }
@@ -22,6 +23,7 @@ function slice(array, begin, end) {
     startIndex = array.length + begin;
   }
 
+  // Set end position based on begin.
   if (end > 0) {
     endIndex = end;
   }
@@ -29,6 +31,16 @@ function slice(array, begin, end) {
     endIndex = array.length + end;
   }
 
+  // Check startIndex and endIndex for anamolies: 
+  // startIndex ends up being negative or endIndex ends up being longer than array.length.
+  if (startIndex < 0) {
+    startIndex = 0;
+  }
+  if (endIndex > array.length) {
+    endIndex = array.length;
+  }
+
+  // Slice array.
   for (var i = startIndex; i < endIndex; i++) {
     slicedArray.push(array[i]);
   }
@@ -69,6 +81,10 @@ tests({
     slicedArray = slice(originalArray, 1);
     eq(slicedArray[0], undefined);
   },
+  'If begin, and begin is negative, and the offset < 0, slice begins from index 0.': function () {
+    var result = slice([1, 2, 3], -4);//[1, 2, 3]
+    eq(result.length, 3)
+  },
   'If end, extraction stops up to end, but does not include end.': function() {
     originalArray = [1, 2];
     slicedArray = slice(originalArray, 0, 1);
@@ -85,8 +101,8 @@ tests({
     originalArray = [1, 2, 3, 4, 5];
     slicedArray = slice(originalArray, 0, 10);
     eq(slicedArray[4], 5);
-    eq(slicedArray[5], undefined);
-  }
+    eq(5 in slicedArray, false)
+  },
 })
 
 </script>
